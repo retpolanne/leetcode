@@ -28,11 +28,6 @@ func isSubsequence(givenString string, word string) bool {
 		fmt.Printf("letter %s\n", string(c))
 		for !match && i < len(givenString) {
 			if string(c) == string(givenString[i]) {
-				fmt.Printf(
-					"letter %s matches given %s\n",
-					string(c),
-					string(givenString[i]),
-				)
 				match = true
 				matches = matches + 1
 				break
