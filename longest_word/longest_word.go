@@ -21,20 +21,19 @@ func findSubsequences(setOfWords []string, givenString string) []string {
 }
 
 func isSubsequence(givenString string, word string) bool {
-	match := false
 	matches := 0
+	i := 0
 	for _, c := range word {
-		i := 0
-		for !match && i < len(givenString) {
+		readGivenString := false
+		for !readGivenString && i < len(givenString) {
 			if string(c) == string(givenString[i]) {
-				match = true
+				readGivenString = true
 				matches = matches + 1
 				break
 			} else {
 				i = i + 1
 			}
 		}
-		match = false
 	}
 
 	if (matches == len(word)) {
