@@ -22,24 +22,29 @@ func findSubsequences(setOfWords []string, givenString string) []string {
 
 func isSubsequence(givenString string, word string) bool {
 	match := false
+	matches := 0
 	for _, c := range word {
 		i := 0
-		for !match && i < len(word) {
-			fmt.Printf("%s\n", string(c))
+		fmt.Printf("letter %s\n", string(c))
+		for !match && i < len(givenString) {
 			if string(c) == string(givenString[i]) {
 				fmt.Printf(
-					"letter %s matches given %s",
+					"letter %s matches given %s\n",
 					string(c),
 					string(givenString[i]),
 				)
 				match = true
+				matches = matches + 1
+				break
 			} else {
 				i = i + 1
 			}
 		}
-		if !match {
-			break
-		}
+		match = false
 	}
-	return match
+
+	if (matches == len(word)) {
+		return true
+	}
+	return false
 }
