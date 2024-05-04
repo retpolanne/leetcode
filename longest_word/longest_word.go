@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func main() {
 	_ = []string{
 		"able",
@@ -13,11 +11,13 @@ func main() {
 }
 
 func findSubsequences(setOfWords []string, givenString string) []string {
-	return []string{
-		"able",
-		"ale",
-		"apple",
+	subsequences := []string{}
+	for _, word := range setOfWords {
+		if isSubsequence(givenString, word) {
+			subsequences = append(subsequences, word)
+		}
 	}
+	return subsequences
 }
 
 func isSubsequence(givenString string, word string) bool {
@@ -25,7 +25,6 @@ func isSubsequence(givenString string, word string) bool {
 	matches := 0
 	for _, c := range word {
 		i := 0
-		fmt.Printf("letter %s\n", string(c))
 		for !match && i < len(givenString) {
 			if string(c) == string(givenString[i]) {
 				match = true

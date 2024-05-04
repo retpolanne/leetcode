@@ -40,6 +40,12 @@ func TestNoSubsequenceSoft(t *testing.T) {
 	assert.False(t, isSubsequence(givenString, testString))
 }
 
+func TestNoSubsequenceOutOfOrder(t *testing.T) {
+	givenString := "abppplee"
+	testString := "bale"
+	assert.False(t, isSubsequence(givenString, testString))
+}
+
 func TestSubsequence(t *testing.T) {
 	// All words from able match
 	givenString := "abppplee"
