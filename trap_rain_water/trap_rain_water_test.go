@@ -34,6 +34,12 @@ func TestMediumElevationMap2(t *testing.T) {
 	assert.Equal(t, 4, trap(elevationMap))
 }
 
+func TestEdgeCaseElevationMap(t *testing.T) {
+	elevationMap := []int{1, 0, 2, 0, 1, 0, 2, 0, 3}
+
+	assert.Equal(t, 8, trap(elevationMap))
+}
+
 func TestNegativeMap2(t *testing.T) {
 	elevationMap := []int{2, 1, 0, 1, 2}
 	negativeMap := []int{0, 1, 2, 1, 0}
