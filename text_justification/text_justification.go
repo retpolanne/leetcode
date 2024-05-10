@@ -13,7 +13,7 @@ func main() {
 
 
 func fullJustify(words []string, maxWidth int) []string {
-	textSlice := [][]string{}
+	textSlice := []string{}
 	i := 0
 	j := 0
 	wordsLen := 0
@@ -35,17 +35,31 @@ func fullJustify(words []string, maxWidth int) []string {
 				i++
 			} else {
 				// Word doesn't fit, increment j and keep i in the same position!
-				textSlice = append(textSlice, lineSlice)
+				textSlice = append(textSlice, justifyCenter(lineSlice, maxWidth))
 				lineSlice = []string{}
 				j++
 				wordsLen = 0
 			}
 		} else {
-			textSlice = append(textSlice, lineSlice)
+			textSlice = append(textSlice, leftJustify(lineSlice, maxWidth))
 			break
 		}
 	}
-	return []string{}
+	return textSlice
+}
+
+func justifyCenter(words []string, maxWidth int) string {
+	var sb strings.Builder
+	for i, word := range words {
+		sb.WriteString(word)
+		if (i < len(words) - 1) && (len(word) < maxWidth) {
+			// Don't add a space after the last word
+			sb.WriteString(" ")
+		} else if (len(words) == 1) {
+			return leftJustify(words, maxWidth)
+		}
+	}
+	return sb.String()
 }
 
 func leftJustify(words []string, maxWidth int) string {
@@ -54,7 +68,9 @@ func leftJustify(words []string, maxWidth int) string {
 	for _, word := range words {
 		rightPadding = rightPadding - len(word)
 		sb.WriteString(word)
-		sb.WriteString(" ")
+		if (len(word) < maxWidth) {
+			sb.WriteString(" ")
+		}
 	}
 	for _ = range rightPadding {
 		sb.WriteString(" ")
