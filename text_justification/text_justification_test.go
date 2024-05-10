@@ -42,5 +42,5 @@ func TestLeftJustifyLastLine(t *testing.T) {
 func TestJustifyCenter(t *testing.T) {
 	exampleLine := "is    a    form   of"
 
-	assert.Equal(t, exampleLine, leftJustify([]string{"is", "a", "form", "of"}, 20))
+	assert.Equal(t, exampleLine, justifyCenter([]string{"is", "a", "form", "of"}, 20))
 }

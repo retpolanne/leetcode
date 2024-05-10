@@ -49,17 +49,57 @@ func fullJustify(words []string, maxWidth int) []string {
 }
 
 func justifyCenter(words []string, maxWidth int) string {
+	lineLen := 0
+	letterCount := findHowManyLetters(words)
+	idealSpaceLen := 1
+	spaceCount := len(words) - 1
+	spaceAdded := 0
+	smallLastSpace := false
+
+	if (len(words) > 1) {
+		remainingSpaces := (maxWidth - letterCount)
+		if remainingSpaces % 2 == 0 {
+			idealSpaceLen = remainingSpaces / (spaceCount)
+		} else {
+			idealSpaceLen = (remainingSpaces + 1) / (spaceCount)
+		}
+	}
+
+	if idealSpaceLen * spaceCount + letterCount > maxWidth {
+		smallLastSpace = true
+	}
+
 	var sb strings.Builder
 	for i, word := range words {
 		sb.WriteString(word)
+		lineLen = lineLen + len(word)
+		// Don't add a space after the last word
 		if (i < len(words) - 1) && (len(word) < maxWidth) {
-			// Don't add a space after the last word
-			sb.WriteString(" ")
+			if spaceAdded == spaceCount - 1 && smallLastSpace {
+				for _ = range idealSpaceLen - 1 {
+					sb.WriteString(" ")
+					lineLen++
+				}
+			} else {
+				for _ = range idealSpaceLen {
+					sb.WriteString(" ")
+					lineLen++
+				}
+			}
+			spaceAdded++
 		} else if (len(words) == 1) {
 			return leftJustify(words, maxWidth)
 		}
 	}
 	return sb.String()
+}
+
+func findHowManyLetters(words []string) int {
+	letterCount := 0
+	for _, word := range words {
+		letterCount = letterCount + len(word)
+	}
+	return letterCount
 }
 
 func leftJustify(words []string, maxWidth int) string {
