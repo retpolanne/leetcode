@@ -31,10 +31,10 @@ func TestScheduleMeetingsFirstSlot(t *testing.T) {
 	assert.Equal(t, 0, meeting3Ret.DelayedHours)
 
 	room0Queue := []*Meeting{
-		meeting1, meeting2,
+		meeting1, meeting2, nil,
 	}
 	room1Queue := []*Meeting{
-		meeting3,
+		meeting3, nil, nil,
 	}
 	assert.Equal(t, room0Queue, roomMgmt.Rooms[0].MeetingQueue)
 	assert.Equal(t, room1Queue, roomMgmt.Rooms[1].MeetingQueue)
@@ -66,10 +66,10 @@ func TestScheduleMeetingsToTheLowestRoom(t *testing.T) {
 	assert.Equal(t, 0, meeting3Ret.DelayedHours)
 
 	room0Queue := []*Meeting{
-		meeting1, meeting3,
+		meeting1, meeting3, nil,
 	}
 	room1Queue := []*Meeting{
-		meeting2,
+		meeting2, nil, nil,
 	}
 	assert.Equal(t, room0Queue, roomMgmt.Rooms[0].MeetingQueue)
 	assert.Equal(t, room1Queue, roomMgmt.Rooms[1].MeetingQueue)
@@ -101,10 +101,10 @@ func TestScheduleMeetingsWithDelay(t *testing.T) {
 	assert.Equal(t, 1, meeting3Ret.DelayedHours)
 
 	room0Queue := []*Meeting{
-		meeting1, meeting3,
+		meeting1, meeting3, nil,
 	}
 	room1Queue := []*Meeting{
-		meeting2,
+		meeting2, nil, nil,
 	}
 	assert.Equal(t, room0Queue, roomMgmt.Rooms[0].MeetingQueue)
 	assert.Equal(t, room1Queue, roomMgmt.Rooms[1].MeetingQueue)
