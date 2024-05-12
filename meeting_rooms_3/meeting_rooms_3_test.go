@@ -109,3 +109,24 @@ func TestScheduleMeetingsWithDelay(t *testing.T) {
 	assert.Equal(t, room0Queue, roomMgmt.Rooms[0].MeetingQueue)
 	assert.Equal(t, room1Queue, roomMgmt.Rooms[1].MeetingQueue)
 }
+
+func TestMostBooked(t *testing.T) {
+	meetings := [][]int{
+		[]int{0, 10},
+		[]int{1, 5},
+		[]int{2, 7},
+		[]int{3, 4},
+	}
+	assert.Equal(t, 0, mostBooked(2, meetings))
+}
+
+func TestMostBooked2(t *testing.T) {
+	meetings := [][]int{
+		[]int{1, 20},
+		[]int{2, 10},
+		[]int{3, 5},
+		[]int{4, 9},
+		[]int{6, 8},
+	}
+	assert.Equal(t, 1, mostBooked(3, meetings))
+}

@@ -12,6 +12,7 @@ type Room struct {
 	FirstMeetingTime int
 	NextSlot int
 	Id int
+	MeetingCount int
 }
 
 func (room *Room) Init(meetingsLen int, id int) {
@@ -21,6 +22,7 @@ func (room *Room) Init(meetingsLen int, id int) {
 	room.FirstMeetingTime = 100
 	room.NextSlot = 0
 	room.Id = id
+	room.MeetingCount = 0
 }
 
 func (room *Room) ScheduleMeeting(meeting *Meeting) {
@@ -41,6 +43,7 @@ func (room *Room) ScheduleMeeting(meeting *Meeting) {
 			room.NextMeetingTime = meeting.End
 		}
 		room.NextSlot++
+		room.MeetingCount++
 	}
 	// The edge case here would be that RoomMgmt didn't calculate the correct delays
 }
@@ -123,5 +126,21 @@ func (meeting *Meeting) Init(start, end int) {
 }
 
 func mostBooked(n int, meetings [][]int) int {
-	return 0
+	// (roomId, count)
+	mostBookedRoom := []int{-1, 0}
+	roomMgmt := &RoomMgmt{}
+	roomMgmt.Init(n, len(meetings))
+	for _, meeting := range meetings {
+		meet := &Meeting{}
+		meet.Init(meeting[0], meeting[1])
+		roomMgmt.TryToSchedule(meet)
+	}
+
+	for i, room := range roomMgmt.Rooms {
+		if room.MeetingCount > mostBookedRoom[1] {
+			mostBookedRoom[0] = i
+			mostBookedRoom[1] = room.MeetingCount
+		}
+	}
+	return mostBookedRoom[0]
 }
