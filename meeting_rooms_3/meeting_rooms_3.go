@@ -143,8 +143,8 @@ func mostBooked(n int, meetings [][]int) int {
 		meetPQ.Insert(meet)
 	}
 
-	for _, meeting := range meetPQ.Queue {
-		roomMgmt.TryToSchedule(meeting)
+	for _, _ = range meetPQ.Queue {
+		roomMgmt.TryToSchedule(meetPQ.Pop())
 	}
 
 	for i, room := range roomMgmt.Rooms {
@@ -173,16 +173,37 @@ func (m *MeetingPriorityQueue) Insert(meeting *Meeting) {
 
 	if i > 0 {
 		for {
+			oldIndex := i
 			i = m.Sort(i)
 			// If new index of object is zero or less
 			// or if new index is the same as last index
 			// break out of loop
-			if i <= 0 || i == m.LastIndex {
+			if i <= 0 || i == oldIndex {
 				break
 			}
 		}
 	}
 	m.LastIndex++
+}
+
+func (m *MeetingPriorityQueue) Pop() (meeting *Meeting) {
+	// Save meeting
+	meeting = m.Queue[0]
+	m.Queue[0] = m.Queue[m.LastIndex - 1]
+
+	m.LastIndex--
+	i := m.LastIndex - 1
+
+	if i > 0 {
+		for {
+			i = m.Sort(i)
+			i--
+			if i <= 0 {
+				break
+			}
+		}
+	}
+	return meeting
 }
 
 // Return new index of object at provided index
