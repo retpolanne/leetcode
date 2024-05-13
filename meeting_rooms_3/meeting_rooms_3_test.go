@@ -130,3 +130,25 @@ func TestMostBooked2(t *testing.T) {
 	}
 	assert.Equal(t, 1, mostBooked(3, meetings))
 }
+
+func TestMostBooked3(t *testing.T) {
+	meetings := [][]int{
+		[]int{10, 11},
+		[]int{2, 10},
+		[]int{1, 17},
+		[]int{9, 13},
+		[]int{18, 20},
+	}
+	assert.Equal(t, 1, mostBooked(2, meetings))
+}
+
+func TestMostBooked4(t *testing.T) {
+	meetings := [][]int{
+		[]int{4,11},
+		[]int{1,13},
+		[]int{8,15},
+		[]int{9,18},
+		[]int{0,17},
+	}
+	assert.Equal(t, 1, mostBooked(2, meetings))
+}

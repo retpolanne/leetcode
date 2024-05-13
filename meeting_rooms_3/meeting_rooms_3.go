@@ -26,8 +26,6 @@ func (room *Room) Init(meetingsLen int, id int) {
 }
 
 func (room *Room) ScheduleMeeting(meeting *Meeting) {
-	fmt.Printf("Scheduling meeting that starts at %d ends at %d on room %d\n", meeting.Start, meeting.End, room.Id)
-	fmt.Printf("next meeting time %d room %d\n", room.NextMeetingTime, room.Id)
 	// This assumes that RoomMgmt already calculated the necessary delays
 	if (meeting.Start >= room.NextMeetingTime) ||
 		(meeting.End <= room.FirstMeetingTime) {
@@ -86,7 +84,7 @@ func (roomMgmt *RoomMgmt) TryToSchedule(meeting *Meeting) *Meeting {
 				smallestDelay[1] = i
 			}
 		}
-		if meeting.Start == roomMgmt.Rooms[i].NextMeetingTime {
+		if meeting.Start >= roomMgmt.Rooms[i].NextMeetingTime {
 			// Schedule right on, as we have space here
 			roomMgmt.Rooms[i].ScheduleMeeting(meeting)
 			return meeting
@@ -130,10 +128,23 @@ func mostBooked(n int, meetings [][]int) int {
 	mostBookedRoom := []int{-1, 0}
 	roomMgmt := &RoomMgmt{}
 	roomMgmt.Init(n, len(meetings))
+	meetPQ := &MeetingPriorityQueue{}
+	meetPQ.Init(len(meetings))
+
+	// We want to start booking rooms by the earliest
+	// start time
+
+	// TODO
+	// RFC - we're using two for loops here
+	// one for the consumer and the other for the insertion
 	for _, meeting := range meetings {
 		meet := &Meeting{}
 		meet.Init(meeting[0], meeting[1])
-		roomMgmt.TryToSchedule(meet)
+		meetPQ.Insert(meet)
+	}
+
+	for _, meeting := range meetPQ.Queue {
+		roomMgmt.TryToSchedule(meeting)
 	}
 
 	for i, room := range roomMgmt.Rooms {
@@ -143,4 +154,72 @@ func mostBooked(n int, meetings [][]int) int {
 		}
 	}
 	return mostBookedRoom[0]
+}
+
+type MeetingPriorityQueue struct {
+	Queue []*Meeting
+	LastIndex int
+}
+
+func (m *MeetingPriorityQueue) Init(meetingsLen int) {
+	m.Queue = make([]*Meeting, meetingsLen)
+	m.LastIndex = 0
+}
+
+func (m *MeetingPriorityQueue) Insert(meeting *Meeting) {
+	// First we insert the meeting to the queue's last index
+	m.Queue[m.LastIndex] = meeting
+	i := m.LastIndex
+
+	if i > 0 {
+		for {
+			i = m.Sort(i)
+			// If new index of object is zero or less
+			// or if new index is the same as last index
+			// break out of loop
+			if i <= 0 || i == m.LastIndex {
+				break
+			}
+		}
+	}
+	m.LastIndex++
+}
+
+// Return new index of object at provided index
+func (m *MeetingPriorityQueue) Sort(index int) int {
+	i := index
+	// If there are children, we need to sort the queue
+	if index % 2 == 0 {
+		// Compare left-right kids
+		rightIndex := index
+		leftIndex := index - 1
+		parentIndex := (index / 2) - 1
+
+		if (m.Queue[leftIndex].Start > m.Queue[rightIndex].Start) {
+			// Swap left with right index
+			old := m.Queue[leftIndex]
+			m.Queue[leftIndex] = m.Queue[rightIndex]
+			m.Queue[rightIndex] = old
+			i = leftIndex
+		}
+
+		// Compare left with parent
+		if (m.Queue[leftIndex].Start < m.Queue[parentIndex].Start) {
+			old := m.Queue[parentIndex]
+			m.Queue[parentIndex] = m.Queue[leftIndex]
+			m.Queue[leftIndex] = old
+			i = parentIndex
+		}
+	} else {
+		// Compare left with parent
+		leftIndex := index
+		parentIndex := (index / 2)
+		if (m.Queue[leftIndex].Start < m.Queue[parentIndex].Start) {
+			old := m.Queue[parentIndex]
+			m.Queue[parentIndex] = m.Queue[leftIndex]
+			m.Queue[leftIndex] = old
+			i = parentIndex
+		}
+	}
+	return i
 }
