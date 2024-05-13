@@ -26,6 +26,7 @@ func (room *Room) Init(meetingsLen int, id int) {
 }
 
 func (room *Room) ScheduleMeeting(meeting *Meeting) {
+	fmt.Printf("scheduling meeting at room %d start - %d - end %d\n", room.Id, meeting.Start, meeting.End)
 	// This assumes that RoomMgmt already calculated the necessary delays
 	if (meeting.Start >= room.NextMeetingTime) ||
 		(meeting.End <= room.FirstMeetingTime) {

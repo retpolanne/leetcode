@@ -1,16 +1,15 @@
-Given an integer array nums and an integer k, return the kth largest element in the array.
+You are given an integer n. There are n rooms numbered from 0 to n - 1.
 
-Note that it is the kth largest element in the sorted order, not the kth distinct element.
+You are given a 2D integer array meetings where meetings[i] = [starti, endi] means that a meeting will be held during the half-closed time interval [starti, endi). All the values of starti are unique.
 
-Can you solve it without sorting?
+Meetings are allocated to rooms in the following manner:
 
- 
+Each meeting will take place in the unused room with the lowest number.
+If there are no available rooms, the meeting will be delayed until a room becomes free. The delayed meeting should have the same duration as the original meeting.
+When a room becomes unused, meetings that have an earlier original start time should be given the room.
+Return the number of the room that held the most meetings. If there are multiple rooms, return the room with the lowest number.
 
-Example 1:
+A half-closed interval [a, b) is the interval between a and b including a and not including b.
 
-Input: nums = [3,2,1,5,6,4], k = 2
-Output: 5
-Example 2:
 
-Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
-Output: 4
+https://leetcode.com/problems/meeting-rooms-iii/description/
